@@ -36,7 +36,7 @@ For instance, `x*` matches '' (the empty string), 'x', 'xx', etc.
 
 | Repition    | Meaning                               |
 |-------------|---------------------------------------|
-| `*`         | O or more times                       |
+| `*`         | 0 or more times                       |
 | `+`         | 1 or more times                       |
 | `?`         | 0 or 1 times                          |
 | `{n}`       | Exactly n times                       |
