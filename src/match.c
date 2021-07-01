@@ -5,12 +5,23 @@
 #include "regex.h"
 #include "pattern.h"
 
+//
+// This file performs the brute-force execution of an NFA,
+// i.e. it searches for a path through the NFA which lands on an accepting state.
+//
+
+
+// =================================================================================
+//      a Path struct is a growable array of non-owning Edge pointers
+// =================================================================================
+
 typedef struct {
     Edge** edges;
     size_t len;
     size_t cap;
 } Path;
 
+// Add an edge pointer to the list of traversed edges.
 void push_edge(Path* path, Edge* e) {
     if (path->len >= path->cap) {
         size_t new_cap = 2 * path->cap;
@@ -29,6 +40,8 @@ void push_edge(Path* path, Edge* e) {
     ++path->len;
 }
 
+// Remove the last edge pointer (if there is one)
+// Return NULL otherwise
 Edge* pop_edge(Path* path) {
     if (path->len <= 0) {
         return NULL;
@@ -37,7 +50,32 @@ Edge* pop_edge(Path* path) {
     return path->edges[path->len];
 }
 
+// Initialize the Path's fields
+void init_path(Path* path) {
+    path->edges = NULL;
+    path->len = 0;
+    path->cap = 0;
+}
+
+// Free the memory allocated by this Path
+void destroy_path(Path* path) {
+    free(path->edges);
+}
+
+
+
+
+
+
+
+// =================================================================================
+//                        The path searching functions
+// =================================================================================
+
 // modifies captures to include all the capture groups if it successfully matches
+// Returns true if there is a path starting at the Node object at `node` leading to an accepting state
+//    that consumes `input`.
+// If so, that path is appended to `path`.
 bool search_from(const Node* node, const char* input, Path* path) {
     if (*input == '\0') {
         // it's over, now we see if we landed on an accepting node
@@ -62,6 +100,12 @@ bool search_from(const Node* node, const char* input, Path* path) {
     return false;
 }
 
+// Reconstructs the captured parts of input given a successful path.
+// Returns an array of captured string views
+// path - the successful path
+// input - the input we matched on
+// *match_count - will be initialized with the number of matches we had
+// grp - which groups should be counted
 StrView* captures_from_path(const Path* path, const char* input, size_t* match_count, CaptureFlags grp) {
     *match_count = 0;
     for (size_t i = 0; i < path->len; ++i) {
@@ -96,11 +140,12 @@ StrView* captures_from_path(const Path* path, const char* input, size_t* match_c
     return captures;
 }
 
+// Returns true if the regex object at regex matches the input.
+// Then, captures is initialized with all the information
+//  associated with the number of groups and their captures
 bool is_match(const Regex* regex, const char* input, Captures* captures) {
     Path path;
-    path.edges = NULL;
-    path.len = 0;
-    path.cap = 0;
+    init_path(&path);
     
     Edge dummy_edge;
     dummy_edge.pat = EMPTY_PATTERN;
@@ -123,7 +168,7 @@ bool is_match(const Regex* regex, const char* input, Captures* captures) {
         captures->num_capts[group_idx] = num;
     }
 
-    free(path.edges);
+    destroy_path(&path);
 
     return success;
 }

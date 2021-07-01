@@ -8,6 +8,9 @@
 
 #define MAX_LINE_SIZE 1024
 
+// Use the compiled regex object to read lines from the open file 
+// trim_to_match - flag to indicate if we should only print the matched segment
+// print_captures - flag indicating if we print out all of the captured groups
 void match_lines(const Regex* regex, FILE* file, bool trim_to_match, bool print_captures) {
     // put a null byte before the beginning of the line to help with the anchor testing
     char buf[MAX_LINE_SIZE + 1];

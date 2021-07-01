@@ -1,6 +1,10 @@
 #include "regex.h"
 #include "pattern.h"
 
+//
+// This file contains a variety of methods intended to be useful for debugging various structs
+//
+
 void debug_pat(const Pattern* pat) {
     switch (pat->type) {
         case PAT_EMPTY:
@@ -72,3 +76,4 @@ void debug_regex(const Regex* regex) {
     }
     printf("----------------------------------------------------------------------------\n");
 }
+

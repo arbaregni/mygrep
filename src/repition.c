@@ -4,6 +4,7 @@
 
 #include "repition.h"
 
+// parses an integer from `*str`, advancing `**str` to the first unconsumed char
 unsigned int parse_int(const char** str) {
     char* endptr;
     unsigned int result = strtol(*str, &endptr, 10); // base 10
@@ -12,6 +13,7 @@ unsigned int parse_int(const char** str) {
 }
 
 
+// parses an repition modifier from `*str`, advancing `**str` to the first unconsumed char
 bool parse_repition(Repition* rep, const char** str) {
      switch (**str) {
         case '?':

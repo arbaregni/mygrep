@@ -17,6 +17,7 @@ typedef uint64_t CaptureFlags;
 // 0 captures no groups since all bit fields are set to 0
 #define CAPT_NONE 0
 
+
 typedef struct Node_s Node;
 
 // Represents transition to `target`, by consuming 0 or 1 characters that match `pat`
@@ -67,6 +68,7 @@ bool compile(Regex* regex, const char* str);
 // Prints a debug report to stdout
 void debug_regex(const Regex* regex);
 
+// A non-owning view into a string
 typedef struct {
     // The first char in the string view
     const char* beg;

@@ -6,6 +6,10 @@
 #include "regex.h"
 #include "util.h"
 
+//
+// This file contains methods for compiling format strings into NFAs
+//
+
 // A new node, with no transitions, that is non-accepting
 Node* make_node(Regex* regex) {
     // create the node
@@ -251,6 +255,7 @@ bool compile_nodes(Regex* regex, Node* initial, Node** final, const char** str) 
 }
 // Parses regex until we hit a closing paren or final '$' anchor, or null byte
 // `*str` is avanced to the last unconsumed byte (which will be one of those 3)
+// returns if the regex object was successfully initialized
 bool compile(Regex* regex, const char* str) {
 #ifdef DEBUG
     printf("compiling `%s`...\n", str);
