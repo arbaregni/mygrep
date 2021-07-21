@@ -3,6 +3,12 @@ My attempt at a regex engine / grep utility.
 
 This was a rewrite of a term assignment which accrued a certain amount of technical debt.
 
+## Approach
+
+We compile the regular expression to a NFT (non-deterministic finite automata).
+
+We do an exponential search to find a path through the NFA.
+
 ## Regex Syntax
 
 Normal characters are matched sequentially.
